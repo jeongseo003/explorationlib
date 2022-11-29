@@ -233,6 +233,7 @@ class BanditChange4:
 
 class BanditChange4New:
     """Change the best to the worst - BanditUniform4"""
+    #Change best arm to worst and Change best arm to 0.2 and rest to 0.8
     def __init__(self,
                  num_change=60,
                  p_min=0.1,
@@ -262,6 +263,10 @@ class BanditChange4New:
         # Create change
         self.change = deepcopy(self.orginal)
         self.change.p_dist[self.best] = self.p_change
+        #Change other arms too
+        self.change.p_dist[0] = 0.8
+        self.change.p_dist[1] = 0.8
+        self.change.p_dist[3] = 0.8
         self.change.best = [np.argmax(self.change.p_dist)]
 
     def step(self, action):
