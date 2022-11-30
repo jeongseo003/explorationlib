@@ -149,6 +149,51 @@ def plot_bandit_critic(critic,
     return ax
 
 
+def plot_bandit_actionsNew(exp_data,
+                        num_arms=4,
+                        max_steps=None,
+                        figsize=(3, 3),
+                        s=1,
+                        color="black",
+                        alpha=1.0,
+                        label=None,
+                        title=None,
+                        ax=None):
+    # fmt
+    actions = np.asarray(exp_data["exp_action"])
+    
+    non_best_arm_idxs = np.where(actions != 2)[0]
+    idxs_past_49 = non_best_arm_idxs[non_best_arm_idxs >= 49]
+    first_non_best_arm_past_49 = min(idxs_past_49)
+    
+    steps = np.asarray(exp_data["exp_step"])
+    if max_steps is not None:
+        mask = steps <= max_steps
+        actions = actions[mask]
+        steps = steps[mask]
+
+    # Create a fig obj?
+    if ax is None:
+        fig = plt.figure(figsize=figsize)
+        ax = fig.add_subplot(111)
+
+    # !
+    ax.scatter(steps, actions, s=s, color=color, label=label, alpha=alpha)
+    ax.set_xlabel("Step")
+    ax.set_ylabel("Arm")
+    ax.set_ylim((0, num_arms))
+    ax.set_yticks(list(range(0, num_arms)))
+    print(first_non_best_arm_past_49)
+    sns.despine()
+
+    # Labels, legends, titles?
+    if title is not None:
+        ax.set_title(title)
+    if label is not None:
+        ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+
+    return first_non_best_arm_past_49
+
 def plot_bandit_actions(exp_data,
                         num_arms=4,
                         max_steps=None,
@@ -187,7 +232,6 @@ def plot_bandit_actions(exp_data,
         ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
     return ax
-
 
 def plot_bandit_hist(exp_data,
                      max_steps=None,
