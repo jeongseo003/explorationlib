@@ -164,7 +164,10 @@ def plot_bandit_actionsNew(exp_data,
     
     non_best_arm_idxs = np.where(actions != 2)[0]
     idxs_past_49 = non_best_arm_idxs[non_best_arm_idxs >= 49]
-    first_non_best_arm_past_49 = min(idxs_past_49)
+    if len(idexs_past_49) > 0:
+        first_non_best_arm_past_49 = min(idxs_past_49) 
+    else: first_non_best_arm_past_49 = -1
+    
     
     steps = np.asarray(exp_data["exp_step"])
     if max_steps is not None:
